@@ -6,7 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 class SourceIP(models.Model):
-    address    = models.GenericIPAddressField(null=False, blank=False)
+    address    = models.GenericIPAddressField(null=False, blank=False, unique=True)
     subnet     = models.CharField(max_length=3, null=False, blank=False)
     author     = models.ForeignKey(User, null=False, blank=False, default=1, on_delete=models.PROTECT, editable=False)
     updated_on = models.DateTimeField(auto_now=True, null=False, blank=True)
@@ -17,7 +17,7 @@ class SourceIP(models.Model):
 
 
 class DestinationDomain(models.Model):
-    domain     = models.CharField(null=False, blank=False,max_length=255)
+    domain     = models.CharField(null=False, blank=False,max_length=255, unique=True)
     author     = models.ForeignKey(User, null=False, blank=False, default=1, on_delete=models.PROTECT, editable=False)
     updated_on = models.DateTimeField(auto_now=True, null=False, blank=True)
     created_on = models.DateTimeField(auto_now_add=True, blank=True)
@@ -26,9 +26,9 @@ class DestinationDomain(models.Model):
         return self.domain
 
 class DestinationPort(models.Model):
-    port       = models.IntegerField(null=False, blank=False, validators=[
-            MinValueValidator(1),
-            MaxValueValidator(65536)
+    port       = models.IntegerField(null=False, blank=False, unique=True, validators=[
+                    MinValueValidator(1),
+                    MaxValueValidator(65536)
         ])
     author     = models.ForeignKey(User, null=False, blank=False, default=1, on_delete=models.PROTECT, editable=False)
     updated_on = models.DateTimeField(auto_now=True, null=False, blank=True)
@@ -38,7 +38,7 @@ class DestinationPort(models.Model):
         return str(self.port)
 
 class Method(models.Model):
-    method     = models.CharField(null=False, blank=False,max_length=20)
+    method     = models.CharField(null=False, blank=False,max_length=20, unique=True)
     author     = models.ForeignKey(User, null=False, blank=False, default=1, on_delete=models.PROTECT, editable=False)
     updated_on = models.DateTimeField(auto_now=True, null=False, blank=True)
     created_on = models.DateTimeField(auto_now_add=True, blank=True)
